@@ -22,6 +22,7 @@ bot = commands.Bot(command_prefix='!uni', intents=intents)
 intents.members = True
 prefix = '!uni'
 
+
 def generate_response(message):
     prompt = message
     response = openai.Completion.create(
