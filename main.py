@@ -21,19 +21,18 @@ intents = discord.Intents.all()
 bot = commands.Bot(command_prefix='!uni', intents=intents)
 intents.members = True
 prefix = '!uni'
+model_id = 'gpt-3.5-turbo'
 
 
-def generate_response(message):
-    prompt = message
-    response = openai.Completion.create(
-      engine="text-davinci-003",
-      prompt=prompt,
-      max_tokens=500,
-      top_p=1,
-      stop=None,
-      temperature=0.7,
+def generate_response(conversation):
+    response = openai.ChatCompletion.create(
+        model=model_id,
+        messages=conversation
     )
-    return response.choices[0].text
+    conversation.append({'role': response.choices[0].message.role, 'content': response.choices[0].message.content})
+    return response
+
+conversation = []
 
 @bot.event
 async def on_ready():
@@ -68,12 +67,22 @@ async def on_message(message):
 
         # Resposta do bot para o usuário (OpenAI)
         elif message.content.startswith(prefix + 'resp '):
-            # Envie a mensagem para a API de texto da OpenAI e obtenha a resposta
-            response = generate_response(message.content[len(prefix):].strip())
+            # Adicione a mensagem do usuário à conversa
+            user_message = {'role': 'user', 'content': message.content[len(prefix + 'resp '):].strip()}
+            conversation.append(user_message)
+
+            # Gere a resposta da IA
+            response = generate_response(conversation)
+
+            # Adicione a resposta da IA à conversa
+            ai_message = response['choices'][0]['message']
+            conversation.append({'role': ai_message['role'], 'content': ai_message['content']})
 
             # Envie a resposta de volta ao canal do Discord
-            await message.channel.send('```\n' + response + '\n```')
+            await message.channel.send('``UNI-GPT``' + ": " + ai_message['content'])
+
+
     await bot.process_commands(message)
 
 
-bot.run(TOKEN)
+bot.run(TOKEN) 

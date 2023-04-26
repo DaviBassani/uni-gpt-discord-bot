@@ -14,7 +14,7 @@ def generate_response(message):
         response = openai.Completion.create(
         engine="text-davinci-003",
         prompt=prompt,
-        max_tokens=4000,
+        max_tokens=500,
         top_p=1,
         stop=None,
         temperature=0.7,
@@ -47,5 +47,10 @@ async def self(interaction: discord.Interaction):
 async def self(interaction: discord.Interaction, prompt: str):
     awnser = generate_response(prompt)
     await interaction.response.send_message(f'Usuário disse: {prompt}\nUni: ```{awnser}```')
+
+@tree.command(name='resumo', description='Usa inteligência artificial para resumir um texto')
+async def self(interaction: discord.Interaction, texto: str):
+    awnser = generate_response(f'Resuma o seguinte texto: "{texto}"')
+    await interaction.response.send_message(f'{awnser}')
 
 client.run(uni_token.UNITOKEN())
