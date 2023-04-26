@@ -58,7 +58,7 @@ async def on_message(message):
             **Versão:** {versao}
             **Novas funcionalidades:**
             Versão: ``{versao}``
-            Foi adicionado integração com o ``text-davinci-003``. Para saber mais, vá para https://www.openai.com
+            Foi removida a integração com o ``text-davinci-003`` e adicionada a integração com o ``gpt-3.5-turbo``, a IA da OpenAI. Para saber mais, vá para https://www.openai.com
             ''')
 
         # Lista de comandos do bot
