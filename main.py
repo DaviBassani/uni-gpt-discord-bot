@@ -13,7 +13,7 @@ actual_time = datetime.now()
 TOKEN = uni_token.UNITOKEN()
 msg_id = None
 msg_user = None
-versao = ('BETA 1.0')
+versao = ('BETA 1.1')
 API = uni_token.OPENAITOKEN()
 openai.api_key = API
 openai.Model.list()
